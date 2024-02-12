@@ -8,6 +8,7 @@ export class SessionsController {
       nombre: req.user.first_name,
       email: req.user.email,
       rol: req.user.rol,
+      carrito: req.user.cartId
     };
 
     res.redirect(

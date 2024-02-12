@@ -5,6 +5,8 @@
 import { productsModelo } from "../dao/models/products.model.js";
 import { cartsModelo } from "../dao/models/carts.model.js";
 
+
+
 export class VistasController {
   constructor() {}
 
@@ -55,6 +57,7 @@ export class VistasController {
         category,
         sort,
         mensajeBienvenida,
+        usuario: req.session.user
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

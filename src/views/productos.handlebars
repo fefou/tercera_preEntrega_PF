@@ -8,15 +8,18 @@
 <div style="color: green;">{{mensajeBienvenida}}</div>
 {{/if}}
 
+<div>Carrito de {{usuario.carrito}}</div>
+
+
 <div>
   {{#each products}}
   <p><a href="/realtimeproducts/{{this._id}}">{{this.title}}</a></p> <!-- Link al producto -->
   <strong>
     <p>{{this.price}}</p>
   </strong>
-  <form action="/carts/65779c158beceb4b2d645629/products/{{this._id}}" method="post">
+  <form action="/carts/{{usuario.carrito}}/products/{{this._id}}" method="post">
     <input type="number" name="quantity" min="1" value="1">
-    <button type="submit">Agregar al carrito</button>
+    <button type="submit">Agregar al carrito{{usuario.carrito}}</button>
   </form>
   <hr>
   {{/each}}

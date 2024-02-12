@@ -1,10 +1,5 @@
 import { Router } from "express";
 export const router = Router();
-import productosJSON from "../json/productos.json" assert { type: "json" };
-import mongoose from "mongoose";
-import { productsModelo } from "../dao/models/products.model.js";
-import { cartsModelo } from "../dao/models/carts.model.js";
-import sessions from "express-session";
 import { VistasController } from "../controllers/vistas.controller.js";
 
 router.get("/", (req, res) => {
