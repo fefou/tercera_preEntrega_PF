@@ -32,6 +32,7 @@ export class VistasController {
       filter.category = category;
     }
 
+    let usuario = req.session.usuario;
     let products;
     try {
       products = await productsModelo.paginate(filter, {
@@ -57,7 +58,8 @@ export class VistasController {
         category,
         sort,
         mensajeBienvenida,
-        usuario: req.session.user
+        usuario
+        
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

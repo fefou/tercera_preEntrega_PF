@@ -17,9 +17,9 @@
   <strong>
     <p>{{this.price}}</p>
   </strong>
-  <form action="/carts/{{usuario.carrito}}/products/{{this._id}}" method="post">
+  <form action="/carts/{{../usuario.carrito}}/products/{{this._id}}" method="post">
     <input type="number" name="quantity" min="1" value="1">
-    <button type="submit">Agregar al carrito{{usuario.carrito}}</button>
+    <button type="submit">Agregar al carrito</button>
   </form>
   <hr>
   {{/each}}
