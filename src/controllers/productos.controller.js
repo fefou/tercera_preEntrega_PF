@@ -135,88 +135,102 @@ export class ProductosController {
   }
 
   static async putProducto(req, res) {
-    let {id} = req.params
-    if(!mongoose.isValidObjectId(id)){
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `Indique un id válido` });
+    let { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: `Indique un id válido` });
     }
-    
-    let existe
+
+    let existe;
     try {
-        existe = await productsModelo.findOne({deleted:false, _id:id})
+      existe = await productsModelo.findOne({ deleted: false, _id: id });
     } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json({ error: `Error al buscar producto`, message: error.message });
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(500)
+        .json({ error: `Error al buscar producto`, message: error.message });
     }
 
     if (!existe) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `No existe producto con id ${id}` });
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: `No existe producto con id ${id}` });
     }
 
-    if(req.body._id){
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `No se puede modificar el id` });
+    if (req.body._id) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: `No se puede modificar el id` });
     }
 
-    let resultado
+    let resultado;
     try {
-        resultado=await productsModelo.updateOne({deleted:false, _id:id},req.body)
-        console.log(resultado)
+      resultado = await productsModelo.updateOne(
+        { deleted: false, _id: id },
+        req.body
+      );
+      console.log(resultado);
 
-        if (resultado.modifiedCount>0){
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(200).json({ payload:"modificación realizada" });
-
-        }else{
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(200).json({ message:"No se modificó ningún producto" });
-        }
-
+      if (resultado.modifiedCount > 0) {
+        res.setHeader("Content-Type", "application/json");
+        return res.status(200).json({ payload: "modificación realizada" });
+      } else {
+        res.setHeader("Content-Type", "application/json");
+        return res
+          .status(200)
+          .json({ message: "No se modificó ningún producto" });
+      }
     } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json({ error: `Error inesperado`, message: error.message });
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(500)
+        .json({ error: `Error inesperado`, message: error.message });
     }
   }
 
   static async deleteProducto(req, res) {
-    let { id } = req.params
+    let { id } = req.params;
 
-    if(!mongoose.isValidObjectId(id)){
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `Indique un id válido` });
+    if (!mongoose.isValidObjectId(id)) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: `Indique un id válido` });
     }
-    
-    let existe
+
+    let existe;
     try {
-        existe = await productsModelo.findOne({deleted:false, _id:id})
+      existe = await productsModelo.findOne({ deleted: false, _id: id });
     } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json({ error: `Error al buscar producto`, message: error.message });
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(500)
+        .json({ error: `Error al buscar producto`, message: error.message });
     }
 
     if (!existe) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `No existe producto con id ${id}` });
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: `No existe producto con id ${id}` });
     }
 
-    let resultado
+    let resultado;
     try {
-        resultado=await productsModelo.updateOne({deleted:false, _id:id},{$set:{deleted:true}})
-        console.log(resultado)
+      resultado = await productsModelo.updateOne(
+        { deleted: false, _id: id },
+        { $set: { deleted: true } }
+      );
+      console.log(resultado);
 
-        if (resultado.modifiedCount>0){
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(200).json({ payload:"Producto Eliminado" });
-
-        }else{
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(200).json({ message:"No se eliminó ningún producto" });
-        }
-
+      if (resultado.modifiedCount > 0) {
+        res.setHeader("Content-Type", "application/json");
+        return res.status(200).json({ payload: "Producto Eliminado" });
+      } else {
+        res.setHeader("Content-Type", "application/json");
+        return res
+          .status(200)
+          .json({ message: "No se eliminó ningún producto" });
+      }
     } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json({ error: `Error inesperado`, message: error.message });
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(500)
+        .json({ error: `Error inesperado`, message: error.message });
     }
   }
 }

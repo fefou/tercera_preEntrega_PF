@@ -13,36 +13,50 @@ const auth = (req, res, next) => {
   }
   next();
 };
+
+const authAdmin = (req, res, next) => {
+  if (!req.session.usuario || req.session.usuario.rol !== "admin") {
+    // mostrar un mensaje que diga que para entrar debes ser admin
+
+    res.redirect("/login");
+  }
+  next();
+};
+
+const authUser = (req, res, next) => {
+  if (!req.session.usuario || req.session.usuario.rol !== "user") {
+    // mostrar un mensaje que diga que para entrar debes ser user
+
+    res.redirect("/login");
+  }
+  next();
+};
 // ------------ AUTH ------------
 
 // ------------ PRODUCTOS ------------
 router.get("/realtimeproducts", VistasController.realTimeProducts);
 
-router.get(
-  "/realtimeproducts/:pid",
-  auth,
-  VistasController.realTimeProductsById
-);
+router.get("/realtimeproducts/:pid", auth, VistasController.realTimeProductsById);
 // ------------ PRODUCTOS ------------
 
 //  ------------ CHAT ------------
 
-router.get("/chat", auth, (req, res) => {
+router.get("/chat", authUser, (req, res) => {
   res.status(200).render("chat");
 });
 //  ------------ CHAT ------------
 
 // ------------ CARRITOS ------------
-router.get("/carts", auth, VistasController.carts);
+router.get("/carts", authUser, VistasController.carts);
 
-router.get("/carts/:cid", auth, VistasController.cartsbyId);
+router.get("/carts/:cid", authUser, VistasController.cartsbyId);
 
 // ------------ CARRITO ------------
 
 //  ------------ AGREGAR AL CARRITO ------------
 router.post(
   "/carts/:cid/products/:pid",
-  auth,
+  authUser, 
   VistasController.agregarAlCarrito
 );
 

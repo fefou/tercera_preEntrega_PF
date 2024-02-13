@@ -90,7 +90,7 @@ export class VistasController {
         { lean: true, populate: "products.product" }
       );
       console.log(carts);
-      res.status(200).render("carts", { carts: carts.docs });
+      res.status(200).render("cart", { carts: carts.docs });
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Error al obtener carritos");

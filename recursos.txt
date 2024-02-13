@@ -8,3 +8,6 @@ Owned by: @fefou
 App ID: 772831
 Client ID: Iv1.c0a7875e10a1f075
 9ae228d6554c6c3ba9a79a2df25ce6ff053d988a
+
+admin: adminCoder@coder.com
+pass: adminCod3r123
