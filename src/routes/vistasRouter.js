@@ -34,7 +34,7 @@ const authUser = (req, res, next) => {
 // ------------ AUTH ------------
 
 // ------------ PRODUCTOS ------------
-router.get("/realtimeproducts", VistasController.realTimeProducts);
+router.get("/realtimeproducts", authUser, VistasController.realTimeProducts);
 
 router.get("/realtimeproducts/:pid", auth, VistasController.realTimeProductsById);
 // ------------ PRODUCTOS ------------
@@ -87,3 +87,11 @@ router.get("/perfil", auth, (req, res) => {
   res.setHeader("Content-Type", "text/html");
   res.status(200).render("perfil", { usuario });
 });
+// ------------ PERFIL ------------
+
+
+// ------------ CARGA PRODUCTOS ------------
+router.get("/cargaProductos", authAdmin, VistasController.cargaProductos)
+
+
+// ------------ CARGA PRODUCTOS ------------

@@ -142,4 +142,60 @@ export class VistasController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async cargaProductos(req, res) {
+    let { mensajeBienvenida } = req.query;
+    let pagina = 1;
+    if (req.query.pagina) {
+      pagina = Number(req.query.pagina);
+    }
+
+    let limite;
+    if (!req.query.limit) {
+      limite = 10;
+    } else {
+      limite = Number(req.query.limit);
+    }
+
+    let category = req.query.category || null;
+    let sort = req.query.sort || "asc";
+
+    let filter = {};
+    if (category) {
+      filter.category = category;
+    }
+
+    let usuario = req.session.usuario;
+    let products;
+    try {
+      products = await productsModelo.paginate(filter, {
+        lean: true,
+        page: pagina,
+        limit: limite,
+        sort: { price: sort },
+      });
+
+      let { totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } =
+        products;
+
+      console.log(products);
+
+      res.status(200).render("cargaProductos", {
+        products: products.docs,
+        totalPages,
+        hasNextPage,
+        hasPrevPage,
+        prevPage,
+        nextPage,
+        limit: limite,
+        category,
+        sort,
+        mensajeBienvenida,
+        usuario
+        
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
