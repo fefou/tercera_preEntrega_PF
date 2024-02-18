@@ -187,6 +187,9 @@ export class ProductosController {
   }
 
   static async deleteProducto(req, res) {
+
+    console.log('ID del producto a eliminar:', req.params.id);
+
     let { id } = req.params;
 
     if (!mongoose.isValidObjectId(id)) {

@@ -2,9 +2,13 @@ import { Router } from "express";
 export const router = Router();
 import { VistasController } from "../controllers/vistas.controller.js";
 
+console.log('Registrando las rutas de vistas...');
+
 router.get("/", (req, res) => {
   res.status(200).render("Home");
 });
+
+
 
 // ------------ AUTH ------------
 const auth = (req, res, next) => {
@@ -34,7 +38,7 @@ const authUser = (req, res, next) => {
 // ------------ AUTH ------------
 
 // ------------ PRODUCTOS ------------
-router.get("/realtimeproducts", authUser, VistasController.realTimeProducts);
+router.get("/realtimeproducts", auth, VistasController.realTimeProducts);
 
 router.get("/realtimeproducts/:pid", auth, VistasController.realTimeProductsById);
 // ------------ PRODUCTOS ------------
@@ -85,7 +89,7 @@ router.get("/perfil", auth, (req, res) => {
   let usuario = req.session.usuario;
 
   res.setHeader("Content-Type", "text/html");
-  res.status(200).render("perfil", { usuario });
+  res.status(200).render("perfil", { usuario});
 });
 // ------------ PERFIL ------------
 

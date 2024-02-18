@@ -37,4 +37,5 @@ routerC.delete('/:cid', CarritoController.deleteCarrito)
 
 routerC.put('/:cid/products/:pid', CarritoController.putCarritoProducto)
 
+routerC.post('/:cid/purchase', CarritoController.postCarritoCompra)
 export default routerC
