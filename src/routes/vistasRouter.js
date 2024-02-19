@@ -1,13 +1,13 @@
 import { Router } from "express";
 export const router = Router();
 import { VistasController } from "../controllers/vistas.controller.js";
+import { CarritoController } from "../controllers/carrito.controller.js";
 
 console.log('Registrando las rutas de vistas...');
 
 router.get("/", (req, res) => {
   res.status(200).render("Home");
 });
-
 
 
 // ------------ AUTH ------------
@@ -55,13 +55,12 @@ router.get("/carts", authUser, VistasController.carts);
 
 router.get("/carts/:cid", authUser, VistasController.cartsbyId);
 
+router.post("/:cid/purchase", authUser, CarritoController.comprarCarrito);
+
 // ------------ CARRITO ------------
 
 //  ------------ AGREGAR AL CARRITO ------------
-router.post(
-  "/carts/:cid/products/:pid",
-  authUser, 
-  VistasController.agregarAlCarrito
+router.post("/carts/:cid/products/:pid", authUser, VistasController.agregarAlCarrito
 );
 
 // ------------ AGREGAR AL CARRITO ------------
@@ -89,7 +88,7 @@ router.get("/perfil", auth, (req, res) => {
   let usuario = req.session.usuario;
 
   res.setHeader("Content-Type", "text/html");
-  res.status(200).render("perfil", { usuario});
+  res.status(200).render("perfil", { usuario });
 });
 // ------------ PERFIL ------------
 

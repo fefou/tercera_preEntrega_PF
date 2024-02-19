@@ -1,14 +1,3 @@
-// const { Router } = require('express')
-// const routerP = Router()
-// const productosJSON = require('../json/productos.json')
-// const fs = require('fs')
-// const path = require('path')
-// let ruta = path.join(__dirname, '..', 'json', 'productos.json')
-// import productosJSON from '../json/productos.json' assert { type: "json" }
-// import { serverSockets } from '../app.js'
-// import { productsModelo } from '../dao/models/products.model.js'
-// import mongoose from 'mongoose'
-
 import { Router } from 'express'
 import fs from 'fs'
 import path from 'path'

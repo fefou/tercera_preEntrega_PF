@@ -1,12 +1,4 @@
-// import carritosJSON from '../json/carritos.json' assert { type: "json" }
-// import productosJSON from '../json/productos.json' assert { type: "json" }
-// import fs from 'fs'
-// function saveProducts(carritos) {
-//     fs.writeFileSync(ruta, JSON.stringify(carritos, null, 5))
-// }
-// import { cartsModelo } from '../dao/models/carts.model.js'
-// import { productsModelo } from '../dao/models/products.model.js'
-// import mongoose from 'mongoose'
+
 import { Router } from 'express'
 import path from 'path'
 import __dirname from '../utils.js'
@@ -37,5 +29,4 @@ routerC.delete('/:cid', CarritoController.deleteCarrito)
 
 routerC.put('/:cid/products/:pid', CarritoController.putCarritoProducto)
 
-routerC.post('/:cid/purchase', CarritoController.postCarritoCompra)
 export default routerC

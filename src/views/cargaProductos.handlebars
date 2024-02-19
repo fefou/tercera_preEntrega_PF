@@ -6,37 +6,30 @@
 
 <div>
   {{#each products}}
-    <p><a href="/cargaProductos/{{this._id}}">{{this.title}}</a></p>
-    <!-- Link al producto -->
-    <strong>
-      <p>{{this.price}}</p>
-    </strong>
-    <form action="/api/products/{{this._id}}" method="POST">
-      <input type="hidden" name="_method" value="DELETE" />
-      <button type="submit">Eliminar producto</button>
-    </form>
-    <hr />
+  <p><a href="/cargaProductos/{{this._id}}">{{this.title}}</a></p>
+  <!-- Link al producto -->
+  <strong>
+    <p>{{this.price}}</p>
+  </strong>
+  <form method="POST" action="/api/products/{{this._id}}?_method=DELETE">
+    <button type="submit">DELETE</button>
+  </form>
+  </form>
+  <hr />
   {{/each}}
 </div>
 
-<a
-  href="/realtimeproducts/?pagina=1&limit={{limit}}&category={{category}}&sort={{sort}}"
->Pág.1</a>
+<a href="/realtimeproducts/?pagina=1&limit={{limit}}&category={{category}}&sort={{sort}}">Pág.1</a>
 
 {{#if hasPrevPage}}
-  <a
-    href="/realtimeproducts/?pagina={{prevPage}}&limit={{limit}}&category={{category}}&sort={{sort}}"
-  >Pág.Ant.</a>
+<a href="/realtimeproducts/?pagina={{prevPage}}&limit={{limit}}&category={{category}}&sort={{sort}}">Pág.Ant.</a>
 {{else}}
-  <span>Pág.Ant.</span>
+<span>Pág.Ant.</span>
 {{/if}}
 
 {{#if hasNextPage}}
-  <a
-    href="/realtimeproducts/?pagina={{nextPage}}&limit={{limit}}&category={{category}}&sort={{sort}}"
-  >Pág.Sig.</a>{{else}}<span>Pág.Sig.</span>
+<a
+  href="/realtimeproducts/?pagina={{nextPage}}&limit={{limit}}&category={{category}}&sort={{sort}}">Pág.Sig.</a>{{else}}<span>Pág.Sig.</span>
 {{/if}}
 
-<a
-  href="/realtimeproducts/?pagina={{totalPages}}&limit={{limit}}&category={{category}}&sort={{sort}}"
->Pág.Final</a>
+<a href="/realtimeproducts/?pagina={{totalPages}}&limit={{limit}}&category={{category}}&sort={{sort}}">Pág.Final</a>

@@ -15,4 +15,3 @@ document.location.href='/realtimeproducts'
    
 })
 
-

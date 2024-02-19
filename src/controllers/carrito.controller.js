@@ -1,6 +1,8 @@
 import { cartsModelo } from '../dao/models/carts.model.js'
 import { productsModelo } from '../dao/models/products.model.js'
 import mongoose from 'mongoose'
+import { ticketModelo } from '../dao/models/ticket.model.js';
+import { usuariosModelo } from '../dao/models/users.model.js';
 
 export class CarritoController {
   constructor() { }
@@ -213,41 +215,31 @@ export class CarritoController {
     }
   }
 
-  static async postCarritoCompra(req, res) {
-    const { cid } = req.params;
-
+  static async comprarCarrito(req, res) {
     try {
-      const cart = await cartsModelo.findOne({ _id: cid }).populate("products.product").lean();
+      // Obtén el carrito de la base de datos
+      const cart = await Carrito.findById(req.params.id);
 
-      if (!cart) {
-        return res.status(404).json({ message: "Cart not found" });
-      }
+      // Calcula el monto total
+      const amount = cart.items.reduce((total, item) => total + item.price, 0);
 
-      const productsNotBought = [];
+      // Crea un nuevo ticket
+      const ticket = new ticketModelo({
+        amount: amount,
+        purchaser: req.user.email, // Asegúrate de que el nombre del comprador esté disponible en req.user
+      });
 
-      for (let i = 0; i < cart.products.length; i++) {
-        const productInCart = cart.products[i];
-        const productInDb = await productsModelo.findOne({ _id: productInCart.product._id });
+      // Guarda el ticket en la base de datos
+      await ticket.save();
 
-        if (productInCart.quantity > productInDb.stock) {
-          productsNotBought.push(productInCart);
-          continue;
-        }
+    
 
-        // Subtract 1 from the product stock
-        productInDb.stock -= 1;
-        await productInDb.save();
-      }
-
-      // Update the cart to only contain the products that could not be bought
-      cart.products = productsNotBought;
-      await cart.save();
-
-      // If we reach this point, it means the stock was updated and the cart was updated
-      // Proceed with the purchase...
-
+      // Devuelve el ticket como respuesta
+      return res.status(200).json({ ticket });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
+
   }
+
 }

@@ -16,8 +16,7 @@ const ticketEsquema = new mongoose.Schema(
       required: true,
     },
     purchaser: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      type: String
     },
   },
   { timestamps: true }

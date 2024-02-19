@@ -68,7 +68,7 @@ export class VistasController {
 
   static async realTimeProductsById(req, res) {
     const { pid } = req.params;
-
+    let usuario = req.session.usuario;
     try {
       const product = await productsModelo.findById(pid).lean();
 
@@ -76,7 +76,7 @@ export class VistasController {
         return res.status(404).json({ message: "Producto no encontrado" });
       }
 
-      res.status(200).render("product", { product });
+      res.status(200).render("product", { product, usuario });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -90,7 +90,7 @@ export class VistasController {
         { lean: true, populate: "products.product" }
       );
       console.log(carts);
-      res.status(200).render("cart", { carts: carts.docs });
+      res.status(200).render("carts", { carts: carts.docs });
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Error al obtener carritos");
