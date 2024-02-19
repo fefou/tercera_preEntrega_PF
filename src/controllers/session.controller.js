@@ -19,7 +19,7 @@ export class SessionsController {
   static async register(req, res) {
     let { email } = req.body;
 
-    res.redirect(`/login?mensaje=Usuario ${email}registrado correctamente`);
+    return res.redirect(`/login?mensaje=Usuario ${email}registrado correctamente`);
   }
 
   static async errorLogin(req, res) {

@@ -218,10 +218,15 @@ export class CarritoController {
   static async comprarCarrito(req, res) {
     try {
       // Obtén el carrito de la base de datos
-      const cart = await Carrito.findById(req.params.id);
+      const cart = await cartsModelo.findById(req.params.cid).populate("products.product").lean();
 
       // Calcula el monto total
-      const amount = cart.items.reduce((total, item) => total + item.price, 0);
+      const amount = cart.products.reduce((total, product) => {
+        if (!product.product || typeof product.product.price !== 'number') {
+          throw new Error("El precio del producto no es un número válido");
+        }
+        return total + product.product.price;
+      }, 0);
 
       // Crea un nuevo ticket
       const ticket = new ticketModelo({
@@ -232,14 +237,10 @@ export class CarritoController {
       // Guarda el ticket en la base de datos
       await ticket.save();
 
-    
-
       // Devuelve el ticket como respuesta
       return res.status(200).json({ ticket });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
-
   }
-
 }

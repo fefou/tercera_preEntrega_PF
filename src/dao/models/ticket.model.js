@@ -4,7 +4,6 @@ const ticketEsquema = new mongoose.Schema(
   {
     code: {
       type: String,
-      required: true,
       unique: true,
     },
     purchaseDate: {
@@ -24,16 +23,16 @@ const ticketEsquema = new mongoose.Schema(
 
 ticketEsquema.pre('save', async function (next) {
   if (!this.code) {
-      let codeExists = true;
-      let newCode;
-      while (codeExists) {
-          newCode = Math.random().toString(36).substring(2, 10);
-          const existingTicket = await mongoose.models.ticket.findOne({ code: newCode });
-          if (!existingTicket) {
-              codeExists = false;
-          }
+    let codeExists = true;
+    let newCode;
+    while (codeExists) {
+      newCode = Math.random().toString(36).substring(2, 10);
+      const existingTicket = await ticketModelo.findOne({ code: newCode });
+      if (!existingTicket) {
+        codeExists = false;
       }
-      this.code = newCode;
+    }
+    this.code = newCode;
   }
   next();
 });
