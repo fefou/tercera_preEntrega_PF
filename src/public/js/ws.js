@@ -14,4 +14,3 @@ socket.on("productos", productos=> {
 document.location.href='/realtimeproducts'
    
 })
-

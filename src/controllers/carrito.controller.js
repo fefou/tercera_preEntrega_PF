@@ -218,15 +218,32 @@ export class CarritoController {
   static async comprarCarrito(req, res) {
     try {
       // Obtén el carrito de la base de datos
-      const cart = await cartsModelo.findById(req.params.cid).populate("products.product").lean();
+      const cart = await cartsModelo.findById(req.params.cid).populate('products.product');
 
-      // Calcula el monto total
+      // Verifica si el carrito está vacío o si todos los productos están sin stock
+      if (cart.products.length === 0 || cart.products.every(product => product.product.stock < 1)) {
+        console.log('El carrito está vacío o todos los productos están sin stock');
+        return res.status(200).json({ message: 'El carrito está vacío o todos los productos están sin stock' });
+      }
+
+      // Crea un array para almacenar los productos que no tienen stock suficiente
+      const outOfStockProducts = [];
+
+      // Calcula el monto total y verifica el stock de los productos
       const amount = cart.products.reduce((total, product) => {
-        if (!product.product || typeof product.product.price !== 'number') {
-          throw new Error("El precio del producto no es un número válido");
-        }
-        return total + product.product.price;
-      }, 0);
+  if (product.product.stock < product.quantity) {
+    outOfStockProducts.push(product);
+    return total;
+  }
+
+  product.product.stock -= product.quantity;
+  return total + product.product.price * product.quantity;
+}, 0);
+
+// Guarda los productos uno por uno
+for (const product of cart.products) {
+  await product.product.save();
+}
 
       // Crea un nuevo ticket
       const ticket = new ticketModelo({
@@ -236,6 +253,10 @@ export class CarritoController {
 
       // Guarda el ticket en la base de datos
       await ticket.save();
+
+      // Actualiza el carrito para que solo contenga los productos que no tenían stock suficiente
+      cart.products = outOfStockProducts;
+      await cart.save();
 
       // Devuelve el ticket como respuesta
       return res.status(200).json({ ticket });

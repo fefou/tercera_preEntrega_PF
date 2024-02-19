@@ -118,30 +118,43 @@ export class VistasController {
 
   static async agregarAlCarrito(req, res) {
     const { cid, pid } = req.params;
-    const { quantity } = req.body;
-
+    let { quantity } = req.body;
+    
+    // Asegúrate de convertir la cantidad a un número
+    quantity = parseInt(quantity);
+  
     try {
       const cart = await cartsModelo.findById(cid);
       const product = await productsModelo.findById(pid);
-
+  
       if (!cart || !product) {
         return res
           .status(404)
           .json({ message: "Carrito o producto no encontrado" });
       }
-
-      cart.products.push({
-        product: pid,
-        quantity: quantity,
-      });
-
+  
+      // Verificar si el producto ya está en el carrito
+      const existingProductIndex = cart.products.findIndex(item => item.product.toString() === pid);
+      if (existingProductIndex !== -1) {
+        // Si el producto ya está en el carrito, actualizar la cantidad
+        cart.products[existingProductIndex].quantity += quantity;
+      } else {
+        // Si el producto no está en el carrito, agregarlo
+        cart.products.push({
+          product: pid,
+          quantity: quantity,
+        });
+      }
+  
       await cart.save();
-
+  
       res.redirect("/carts/" + cid);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
+  
+  
 
   static async cargaProductos(req, res) {
     let { mensajeBienvenida } = req.query;
@@ -199,5 +212,6 @@ export class VistasController {
     }
   }
 
+  
   
 }

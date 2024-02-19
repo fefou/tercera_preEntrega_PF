@@ -1,5 +1,5 @@
 <h1>Carrito</h1>
-
+ 
 <ul>
   {{#each cart.products}}
   <li>
@@ -10,4 +10,9 @@
   {{/each}}
 </ul>
 
-<p>Total de productos: {{cart.products.length}}</p>
+<p>Total de productos diferentes: {{cart.products.length}}</p>
+<form method="POST" action="../{{cart._id}}/purchase">
+  <button id="comprarBtn" type="submit">Comprar</button>
+</form>
+
+  
