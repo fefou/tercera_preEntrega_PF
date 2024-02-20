@@ -40,3 +40,5 @@ router.get('/errorRegistro', SessionsController.errorRegistro)
 router.post('/register', passport.authenticate('registro', { failureRedirect: '/api/sessions/errorRegistro' }), SessionsController.register)
 
 router.get('/logout', SessionsController.logout)
+
+router.get('/current', SessionsController.current) 

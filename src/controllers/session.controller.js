@@ -1,5 +1,7 @@
+import { DTO } from '../DTO/DTO.js'
+
 export class SessionsController {
-  constructor() {}
+  constructor() { }
 
   static async login(req, res) {
     console.log(req.user);
@@ -35,7 +37,18 @@ export class SessionsController {
       if (error) {
         return res.redirect("/?error=Error al cerrar sesión");
       }
-      res.redirect("/login");
+      return res.redirect("/login");
     });
+  }
+
+  static async current(req, res) {
+    let session = req.session.usuario;
+  
+    if (session) {
+      let usuario = new DTO(session);
+      return res.status(200).json({ usuario });
+    } else {
+      return res.redirect('/views/login?error= Error, necesita loguearse');
+    }
   }
 }
