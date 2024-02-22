@@ -15,9 +15,8 @@ import { router as sessionRouter } from "./routes/sessionRouter.js";
 import { config } from "./config/config.js";
 import { inicializarPassport } from "./config/config.passport.js";
 import passport from "passport";
-
 import methodOverride from "method-override";
-
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 const productos = pm.getProducts();
 const app = express();
@@ -61,6 +60,7 @@ app.use("/api/products", productosRouter);
 app.use("/api/carts", carritoRouter);
 app.use("/", vistasRouter);
 app.use("/api/sessions", sessionRouter);
+app.use(errorHandler);
 
 const serverHTTP = app.listen(port, () => {
   console.log(`Server escuchando en puerto ${port}`);

@@ -2,8 +2,8 @@ import { Router } from "express";
 export const router = Router();
 import { VistasController } from "../controllers/vistas.controller.js";
 import { CarritoController } from "../controllers/carrito.controller.js";
-
-console.log('Registrando las rutas de vistas...');
+import { mockingController } from "../controllers/mocking.controller.js";
+import { authRoles } from "../middlewares/rol.js"
 
 router.get("/", (req, res) => {
   res.status(200).render("Home");
@@ -18,23 +18,7 @@ const auth = (req, res, next) => {
   next();
 };
 
-const authAdmin = (req, res, next) => {
-  if (!req.session.usuario || req.session.usuario.rol !== "admin") {
-    // mostrar un mensaje que diga que para entrar debes ser admin
 
-    res.redirect("/login");
-  }
-  next();
-};
-
-const authUser = (req, res, next) => {
-  if (!req.session.usuario || req.session.usuario.rol !== "user") {
-    // mostrar un mensaje que diga que para entrar debes ser user
-
-    res.redirect("/login");
-  }
-  next();
-};
 // ------------ AUTH ------------
 
 // ------------ PRODUCTOS ------------
@@ -45,22 +29,22 @@ router.get("/realtimeproducts/:pid", auth, VistasController.realTimeProductsById
 
 //  ------------ CHAT ------------
 
-router.get("/chat", authUser, (req, res) => {
+router.get("/chat", authRoles(['user']), (req, res) => {
   res.status(200).render("chat");
 });
 //  ------------ CHAT ------------
 
 // ------------ CARRITOS ------------
-router.get("/carts", authUser, VistasController.carts);
+router.get("/carts", authRoles(['user']), VistasController.carts);
 
-router.get("/carts/:cid", authUser, VistasController.cartsbyId);
+router.get("/carts/:cid", authRoles(['user']), VistasController.cartsbyId);
 
-router.post("/:cid/purchase", authUser, CarritoController.comprarCarrito);
+router.post("/:cid/purchase", authRoles(['user']), CarritoController.comprarCarrito);
 
 // ------------ CARRITO ------------
 
 //  ------------ AGREGAR AL CARRITO ------------
-router.post("/carts/:cid/products/:pid", authUser, VistasController.agregarAlCarrito
+router.post("/carts/:cid/products/:pid", authRoles(['user']), VistasController.agregarAlCarrito
 );
 
 // ------------ AGREGAR AL CARRITO ------------
@@ -94,7 +78,12 @@ router.get("/perfil", auth, (req, res) => {
 
 
 // ------------ CARGA PRODUCTOS ------------
-router.get("/cargaProductos", authAdmin, VistasController.cargaProductos)
+router.get("/cargaProductos", authRoles(['admin']), VistasController.cargaProductos);
 
 
 // ------------ CARGA PRODUCTOS ------------
+
+
+// ------------ MOCKING------------
+router.get("/mockingproducts", mockingController.createMockData);
+// ------------ MOCKING------------

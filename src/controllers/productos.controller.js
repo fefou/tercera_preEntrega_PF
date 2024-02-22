@@ -2,6 +2,9 @@ import __dirname from "../utils.js";
 import { serverSockets } from "../app.js";
 import { productsModelo } from "../dao/models/products.model.js";
 import mongoose from "mongoose";
+import { CustomError } from "../utils/customErrors.js";
+import { STATUS_CODES } from "../utils/errorStatusCodes.js";
+import { errorData } from "../utils/errores.js";
 
 
 
@@ -80,12 +83,7 @@ export class ProductosController {
     let status = req.body.status !== undefined ? req.body.status : true;
 
     if (!title || !price || !code || !stock || !category) {
-      res.setHeader("Content-Type", "application/json");
-      return res
-        .status(400)
-        .json({
-          error: `title, price, code, stock y category son datos obligatorios.`,
-        });
+      throw CustomError.CustomError("Error", "Datos faltantes", STATUS_CODES.ERROR_DATOS_ENVIADOS, errorData);
     }
 
     let existe = false;
